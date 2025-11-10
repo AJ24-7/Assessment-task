@@ -34,7 +34,8 @@ const Home = () => {
 
   const handleBrochureDownload = async () => {
     try {
-      const response = await axios.get('/api/brochure', { responseType: 'blob' })
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+      const response = await axios.get(`${apiUrl}/api/brochure`, { responseType: 'blob' })
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
       link.href = url
