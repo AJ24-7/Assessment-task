@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Download } from 'lucide-react'
-import axios from 'axios'
+import { Mail, Phone, MapPin, Send, Clock, Download } from 'lucide-react'
+import apiClient from '../services/api'
 import Toast from '../components/Toast'
 
 const Contact = () => {
@@ -42,8 +42,7 @@ const Contact = () => {
 
     try {
       // Send to backend API which will forward to Pipedream
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-      const response = await axios.post(`${apiUrl}/api/contact`, formData)
+      const response = await apiClient.post('/api/contact', formData)
       
       if (response.data.success) {
         showToast('success', '✨ Application submitted successfully! We will contact you within 24-48 hours.')
@@ -117,8 +116,7 @@ const Contact = () => {
 
   const handleBrochureDownload = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-      const response = await axios.get(`${apiUrl}/api/brochure`, { responseType: 'blob' })
+      const response = await apiClient.get('/api/brochure', { responseType: 'blob' })
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
       link.href = url

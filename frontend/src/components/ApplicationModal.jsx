@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import axios from 'axios';
+import apiClient from '../services/api';
 
 const ApplicationModal = ({ isOpen, onClose, selectedCourse, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -56,8 +56,7 @@ const ApplicationModal = ({ isOpen, onClose, selectedCourse, onSuccess }) => {
     console.log('Submitting form data:', formData);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await axios.post(`${apiUrl}/api/contact`, formData);
+      const response = await apiClient.post('/api/contact', formData);
       
       if (response.data.success) {
         setStatus({

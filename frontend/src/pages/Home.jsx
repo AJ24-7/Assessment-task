@@ -6,7 +6,7 @@ import CourseModal from '../components/CourseModal'
 import FeeRangeModal from '../components/FeeRangeModal'
 import ApplicationModal from '../components/ApplicationModal'
 import Toast from '../components/Toast'
-import axios from 'axios'
+import apiClient from '../services/api'
 
 const Home = () => {
   const [selectedCourse, setSelectedCourse] = useState(null)
@@ -34,8 +34,7 @@ const Home = () => {
 
   const handleBrochureDownload = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
-      const response = await axios.get(`${apiUrl}/api/brochure`, { responseType: 'blob' })
+      const response = await apiClient.get('/api/brochure', { responseType: 'blob' })
       const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
       link.href = url
