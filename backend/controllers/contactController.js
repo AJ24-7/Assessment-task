@@ -11,7 +11,18 @@ let submissions = []
  */
 export const submitContactForm = async (req, res, next) => {
   try {
+    console.log('📥 Received form submission:', req.body);
+    
     const { fullName, email, phone, state, courseInterested, intakeYear, consent } = req.body
+
+    // Validate consent explicitly
+    if (consent !== true && consent !== 'true') {
+      return res.status(400).json({
+        success: false,
+        message: 'Consent must be provided',
+        errors: [{ field: 'consent', message: 'You must provide consent to submit the application' }]
+      });
+    }
 
     // Prepare data for Pipedream
     const formData = {
@@ -21,10 +32,12 @@ export const submitContactForm = async (req, res, next) => {
       state,
       courseInterested,
       intakeYear,
-      consent,
+      consent: true, // Ensure it's always boolean true
       submittedAt: new Date().toISOString(),
       source: 'College Website'
     }
+
+    console.log('📤 Prepared data:', formData);
 
     // Store in memory (for demo purposes)
     submissions.push({

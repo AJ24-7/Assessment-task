@@ -32,6 +32,11 @@ const Home = () => {
     showToast('success', '✨ Application submitted successfully! Check your email for confirmation.')
   }
 
+  const handleApplyNow = () => {
+    setApplicationCourse(null) // No specific course selected
+    setShowApplicationModal(true)
+  }
+
   const handleBrochureDownload = async () => {
     try {
       const response = await apiClient.get('/api/brochure', { responseType: 'blob' })
@@ -381,16 +386,15 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              <Link to="/contact">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-white text-primary-700 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-2"
-                >
-                  Apply Now
-                  <ChevronRight size={20} />
-                </motion.button>
-              </Link>
+              <motion.button
+                onClick={handleApplyNow}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-white text-primary-700 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-2"
+              >
+                Apply Now
+                <ChevronRight size={20} />
+              </motion.button>
               <motion.button
                 onClick={handleBrochureDownload}
                 whileHover={{ scale: 1.05 }}

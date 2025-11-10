@@ -41,12 +41,14 @@ const contactValidation = [
     .isIn(['2026', '2027', '2028'])
     .withMessage('Please select a valid intake year'),
   body('consent')
-    .notEmpty()
+    .exists()
     .withMessage('Consent is required')
-    .isBoolean()
-    .withMessage('Consent must be true or false')
-    .custom((value) => value === true)
-    .withMessage('You must provide consent to submit the application')
+    .custom((value) => {
+      if (value === true || value === 'true') {
+        return true;
+      }
+      throw new Error('You must provide consent to submit the application');
+    })
 ]
 
 // POST /api/contact - Submit contact form

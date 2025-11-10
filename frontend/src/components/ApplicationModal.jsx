@@ -52,8 +52,18 @@ const ApplicationModal = ({ isOpen, onClose, selectedCourse, onSuccess }) => {
     setIsSubmitting(true);
     setStatus({ type: '', message: '' });
 
-    // Debug: Log form data
-    console.log('Submitting form data:', formData);
+    // Debug: Log form data with types
+    console.log('📤 Submitting form data:', formData);
+    console.log('📋 Field types:', {
+      fullName: typeof formData.fullName,
+      email: typeof formData.email,
+      phone: typeof formData.phone,
+      state: typeof formData.state,
+      courseInterested: typeof formData.courseInterested,
+      intakeYear: typeof formData.intakeYear,
+      consent: typeof formData.consent,
+      consentValue: formData.consent
+    });
 
     try {
       const response = await apiClient.post('/api/contact', formData);

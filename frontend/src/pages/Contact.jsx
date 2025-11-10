@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Clock, Download } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Clock, Download, CheckCircle, AlertCircle } from 'lucide-react'
 import apiClient from '../services/api'
 import Toast from '../components/Toast'
 
@@ -40,6 +40,13 @@ const Contact = () => {
     setIsSubmitting(true)
     setStatus({ type: '', message: '' })
 
+    // Debug logging
+    console.log('📤 Contact form submission:', formData)
+    console.log('📋 Field types:', {
+      consent: typeof formData.consent,
+      consentValue: formData.consent
+    })
+
     try {
       // Send to backend API which will forward to Pipedream
       const response = await apiClient.post('/api/contact', formData)
@@ -61,7 +68,19 @@ const Contact = () => {
         })
       }
     } catch (error) {
-      showToast('error', '❌ Failed to submit application. Please try again or contact us directly.')
+      console.error('❌ Submission error:', error.response?.data || error)
+      
+      let errorMessage = '❌ Failed to submit application. Please try again or contact us directly.'
+      
+      if (error.response?.data?.errors) {
+        const validationErrors = error.response.data.errors.map(err => `${err.field}: ${err.message}`).join(', ')
+        errorMessage = `Validation errors: ${validationErrors}`
+        console.error('Validation errors:', validationErrors)
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      }
+      
+      showToast('error', errorMessage)
       setStatus({
         type: 'error',
         message: 'Something went wrong. Please try again later or contact us directly.'
